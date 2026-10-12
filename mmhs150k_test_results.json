@@ -1,0 +1,103 @@
+{
+  "num_samples": 1000,
+  "primary_metrics": {
+    "accuracy": 0.735,
+    "precision": 0.3675,
+    "recall": 0.5,
+    "f1_score": 0.4236,
+    "auc_roc": 0.4992
+  },
+  "binary_metrics": {
+    "accuracy": 0.735,
+    "auc_roc": 0.4992,
+    "macro": {
+      "precision": 0.3675,
+      "recall": 0.5,
+      "f1_score": 0.4236
+    },
+    "micro": {
+      "precision": 0.735,
+      "recall": 0.735,
+      "f1_score": 0.735
+    },
+    "hate_class_specific": {
+      "precision": 0.735,
+      "recall": 1.0,
+      "f1_score": 0.8473
+    },
+    "confusion_matrix": [
+      [
+        0,
+        265
+      ],
+      [
+        0,
+        735
+      ]
+    ]
+  },
+  "category_metrics": {
+    "Racism / Xenophobia": {
+      "accuracy": 0.621,
+      "precision": 0.3684,
+      "recall": 0.0187,
+      "f1_score": 0.0356,
+      "support": 374
+    },
+    "Sexism / Misogyny": {
+      "accuracy": 0.42,
+      "precision": 0.1915,
+      "recall": 0.6368,
+      "f1_score": 0.2944,
+      "support": 190
+    },
+    "Homophobia / LGBTQ+ Hate": {
+      "accuracy": 0.115,
+      "precision": 0.115,
+      "recall": 1.0,
+      "f1_score": 0.2063,
+      "support": 115
+    },
+    "Religious Hate": {
+      "accuracy": 0.97,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "support": 30
+    },
+    "Disability Discrimination": {
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "support": 0
+    },
+    "Political Extremism": {
+      "accuracy": 0.956,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "support": 0
+    },
+    "Cyberbullying / Threat": {
+      "accuracy": 0.974,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "support": 0
+    },
+    "Dehumanization / Slurs": {
+      "accuracy": 0.762,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "support": 238
+    }
+  },
+  "average_dynamic_gates": {
+    "main_text_gate": 0.5858,
+    "vision_gate": 0.4221,
+    "cross_attention_gate": 0.5527,
+    "post_text_suppression_gate": 0.408
+  }
+}

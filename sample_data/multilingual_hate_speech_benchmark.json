@@ -1,0 +1,74 @@
+[
+  {
+    "id": "1",
+    "caption": "Check out this cool new car!",
+    "ocr_text": "VROOM VROOM",
+    "post_text": "Love driving on the weekend",
+    "label": 0,
+    "categories": [0, 0, 0, 0, 0, 0, 0, 0],
+    "language": "en"
+  },
+  {
+    "id": "2",
+    "caption": "G3t0ut of my country r@c!st h@t3r",
+    "ocr_text": "GO BACK TO YOUR COUNTRY",
+    "post_text": "Breaking news from local district election",
+    "label": 1,
+    "categories": [1, 0, 0, 0, 0, 0, 1, 1],
+    "language": "en"
+  },
+  {
+    "id": "3",
+    "caption": "Ce groupe de personnes doit être éliminé",
+    "ocr_text": "NETTOYAGE ETHNIQUE",
+    "post_text": "Discours politique sur la sécurité",
+    "label": 1,
+    "categories": [1, 0, 0, 0, 0, 1, 0, 1],
+    "language": "fr"
+  },
+  {
+    "id": "4",
+    "caption": "Este grupo no pertenece aquí f4gg0t",
+    "ocr_text": "FORA DE AQUI",
+    "post_text": "Reacciones en redes sociales",
+    "label": 1,
+    "categories": [0, 0, 1, 0, 0, 0, 1, 1],
+    "language": "es"
+  },
+  {
+    "id": "5",
+    "caption": "Cute cat sitting on the couch",
+    "ocr_text": "MEOW MEOW",
+    "post_text": "Pet lovers community post",
+    "label": 0,
+    "categories": [0, 0, 0, 0, 0, 0, 0, 0],
+    "language": "en"
+  },
+  {
+    "id": "6",
+    "caption": "in logo ko d3sh se n1kalo r$c!st",
+    "ocr_text": "BOHOT HO GAYA",
+    "post_text": "Trending political debate online",
+    "label": 1,
+    "categories": [1, 0, 0, 0, 0, 1, 0, 1],
+    "language": "hi"
+  },
+  {
+    "id": "7",
+    "caption": "Frauen gehören nur in die Küche misogyny",
+    "ocr_text": "KÜCHE NUTRITION",
+    "post_text": "Discussion on workplace equality",
+    "label": 1,
+    "categories": [0, 1, 0, 0, 0, 0, 0, 0],
+    "language": "de"
+  },
+  {
+    "id": "8",
+    "caption": "Happy birthday to my best friend!",
+    "ocr_text": "PARTY TIME",
+    "post_text": "Weekend celebration photos",
+    "label": 0,
+    "categories": [0, 0, 0, 0, 0, 0, 0, 0],
+    "language": "en"
+  }
+]

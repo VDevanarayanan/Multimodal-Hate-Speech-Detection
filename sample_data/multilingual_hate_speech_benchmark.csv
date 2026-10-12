@@ -1,0 +1,13 @@
+id,caption,ocr_text,post_text,label,categories,language
+1,"Check out this cool new car!","VROOM VROOM","Love driving on the weekend",0,"[0,0,0,0,0,0,0,0]","en"
+2,"G3t0ut of my country r@c!st h@t3r","GO BACK TO YOUR COUNTRY","Breaking news from local district election",1,"[1,0,0,0,0,0,1,1]","en"
+3,"Ce groupe de personnes doit être éliminé","NETTOYAGE ETHNIQUE","Discours politique sur la sécurité",1,"[1,0,0,0,0,1,0,1]","fr"
+4,"Este grupo no pertenece aquí f4gg0t","FORA DE AQUI","Reacciones en redes sociales",1,"[0,0,1,0,0,0,1,1]","es"
+5,"Cute cat sitting on the couch","MEOW MEOW","Pet lovers community post",0,"[0,0,0,0,0,0,0,0]","en"
+6,"in logo ko d3sh se n1kalo r$c!st","BOHOT HO GAYA","Trending political debate online",1,"[1,0,0,0,0,1,0,1]","hi"
+7,"Frauen gehören nur in die Küche misogyny","KÜCHE NUTRITION","Discussion on workplace equality",1,"[0,1,0,0,0,0,0,0]","de"
+8,"Happy birthday to my best friend!","PARTY TIME","Weekend celebration photos",0,"[0,0,0,0,0,0,0,0]","en"
+9,"Religious group X are all l!ars and tr@1tors","BAN RELIGION X","Public forum debate thread",1,"[0,0,0,1,0,0,0,1]","en"
+10,"Disabled people are a burden to society","NO RIGHTS","Opinion post in forum",1,"[0,0,0,0,1,0,0,1]","en"
+11,"Beautiful sunset over the mountains","NATURE IS AMAZING","Vacation travel vlog 2026",0,"[0,0,0,0,0,0,0,0]","en"
+12,"We will k1ll all political opponents tonight","WAR IS COMING","Extreme political commentary",1,"[0,0,0,0,0,1,1,0]","en"
