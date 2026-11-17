@@ -1,4 +1,14 @@
 import os
+import sys
+
+# Auto-fallback to local virtual environment python if torch is missing in current environment
+_venv_py = os.path.join(os.path.dirname(os.path.abspath(__file__)), "venv", "bin", "python")
+if os.path.exists(_venv_py) and os.path.realpath(sys.executable) != os.path.realpath(_venv_py):
+    try:
+        import torch
+    except ImportError:
+        os.execv(_venv_py, [_venv_py] + sys.argv)
+
 import json
 import tempfile
 import numpy as np
@@ -9,6 +19,7 @@ from PIL import Image
 from config import CONFIG
 from evaluate import Evaluator
 from text_deobfuscator import TextDeobfuscator
+from dataset_loader import MultimodalHateSpeechDataset
 from models.multimodal_hate_speech_model import MultimodalHateSpeechModel
 
 app = Flask(__name__)
@@ -564,18 +575,17 @@ def predict_api():
         post_ids = item["post_input_ids"].unsqueeze(0).to(evaluator.device)
         post_mask = item["post_attention_mask"].unsqueeze(0).to(evaluator.device)
         
+        has_post = torch.tensor([bool(post_text.strip())], dtype=torch.bool).to(evaluator.device)
         outputs = evaluator.model(
             text_input_ids=text_ids,
             text_attention_mask=text_mask,
             pixel_values=pixel_vals,
             post_input_ids=post_ids,
-            post_attention_mask=post_mask
+            post_attention_mask=post_mask,
+            has_post=has_post
         )
         
         prob = torch.softmax(outputs["binary_logits"], dim=-1)[0, 1].item()
-        ml_probs = torch.sigmoid(outputs["multilabel_logits"])[0].cpu().numpy()
-        
-        detected_cats = [CONFIG.hate_categories[i] for i, p in enumerate(ml_probs) if p >= 0.4]
         
     return jsonify({
         "status": "success",
@@ -583,7 +593,7 @@ def predict_api():
             "is_hate": prob >= 0.5,
             "hate_probability": round(prob, 4),
             "deobfuscated_text": clean_caption,
-            "detected_categories": detected_cats
+            "detected_categories": []
         }
     })
 

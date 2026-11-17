@@ -96,21 +96,47 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Run Evaluation in Terminal
+### 2. End-to-End Automated Fine-Tuning & Evaluation (Best Performance)
 
-Run evaluation on the benchmark dataset or your own dataset:
+To automatically fine-tune with differential learning rates, automatically calibrate the optimal decision threshold, and output the best possible evaluation metrics in the terminal:
 
 ```bash
-python run_detection.py
+# On HarMeme Dataset (Full COVID-19 Harmful Memes):
+python train.py --zip_dataset harmeme.zip
+
+# On Facebook Hateful Memes:
+python run_detection.py --zip_dataset "Archive (1).zip" --samples 1000 --fine_tune
+
+# On MMHS150K Twitter Dataset:
+python run_detection.py --zip_dataset "Multimodal Hate Speech Archive.zip" --samples 1000 --fine_tune
 ```
 
-To evaluate a specific dataset:
-```bash
-# Evaluate on a custom CSV or JSON dataset
-python run_detection.py --dataset sample_data/multilingual_hate_speech_benchmark.csv
+### 3. Run Evaluation on Existing Checkpoint
 
-# Evaluate on MMHS150K archive with a sample limit
-python run_detection.py --zip_dataset "Multimodal Hate Speech Archive.zip" --max_samples 1000
+Running detection automatically detects and loads the best saved model (`checkpoints/best_model.pt`) and its calibrated decision threshold:
+
+```bash
+# Evaluate on HarMeme test set (auto-loads best_model.pt & calibrated threshold):
+python evaluate.py --zip_dataset harmeme.zip --split_ids test.jsonl
+
+# Or with run_detection.py terminal summary tables:
+python run_detection.py --zip_dataset harmeme.zip --split_ids test.jsonl
+
+# Evaluate on Facebook Hateful Memes:
+python run_detection.py --zip_dataset "Archive (1).zip" --samples 500
+
+# Evaluate on MMHS150K Twitter Dataset:
+python run_detection.py --zip_dataset "Multimodal Hate Speech Archive.zip" --samples 500
+```
+
+### 4. Interactive Detection & Single Sample Inference
+
+```bash
+# Single sample classification (Text + Image):
+python run_detection.py --text "Look at this group of people" --image "sample_data/meme1.jpg"
+
+# Interactive REPL mode:
+python run_detection.py -i
 ```
 
 #### Terminal Output Preview:
@@ -150,17 +176,35 @@ python run_detection.py --zip_dataset "Multimodal Hate Speech Archive.zip" --max
    • Post Noise Suppression Gate           : 0.3643
 ```
 
-### 3. Fine-Tuning the Model
+### 3. Fine-Tuning & Diagnostics
 
-To fine-tune the DDCAF cross-attention core and classification heads with Balanced Focal Loss:
-
+#### Diagnostic Sanity Check (Overfitting Test)
+Verify that the model architecture, gradients, and loss functions can overfit 64 samples to ~100% training accuracy:
 ```bash
-python train.py --epochs 3 --batch_size 16 --max_train_samples 1000
+python train.py --overfit_check --max_train_samples 64
 ```
 
-To evaluate using the fine-tuned checkpoint:
+#### Differential Fine-Tuning
+Fine-tune with unfrozen top transformer layers using differential learning rates:
 ```bash
-python run_detection.py --checkpoint checkpoints/best_model.pt
+# Fine-tune with top 2 layers unfrozen (backbone_lr=1.5e-5, fusion_lr=1e-4)
+python train.py --epochs 3 --batch_size 4 --unfreeze_layers 2 --fusion_lr 1e-4 --backbone_lr 1.5e-5 --max_train_samples 1000
+
+# Train binary head alone (without multi-label interference)
+python train.py --binary_only --epochs 3 --max_train_samples 1000
+```
+
+#### Modality Baselines (Ablation Studies)
+Isolate unimodal text vs image performance against full multimodal DDCAF:
+```bash
+# Text-Only Baseline (XLM-RoBERTa + Head)
+python evaluate.py --zip_dataset "Multimodal Hate Speech Archive.zip" --modality text_only --max_samples 1000
+
+# Image-Only Baseline (ViT + Head)
+python evaluate.py --zip_dataset "Multimodal Hate Speech Archive.zip" --modality image_only --max_samples 1000
+
+# Full Multimodal (DDCAF + Dynamic Gating)
+python evaluate.py --zip_dataset "Multimodal Hate Speech Archive.zip" --modality multimodal --max_samples 1000
 ```
 
 ### 4. Interactive Web Dashboard (Optional)

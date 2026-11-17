@@ -36,7 +36,13 @@ class ModelConfig:
     multilabel_loss_weight: float = 1.0
     rationale_loss_weight: float = 0.5
     focal_gamma: float = 2.0
-    focal_alpha: float = 0.25
+    focal_alpha: float = 0.75 # Class weighting for positive hate class in imbalanced sets
+    
+    # Differential Learning Rates & Layer Unfreezing
+    fusion_lr: float = 1e-4
+    backbone_lr: float = 1.5e-5
+    unfreeze_backbone_layers: int = 2 # Top-k layers of XLM-R and ViT to unfreeze
+    default_modality: str = "multimodal" # "multimodal", "text_only", "image_only"
     
     import torch
     device: str = "cuda" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu")

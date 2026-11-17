@@ -14,13 +14,16 @@ class ViTVisualStream(nn.Module):
         self.embed_dim = embed_dim
         
         try:
-            self.vit = ViTModel.from_pretrained(model_name)
+            self.vit = ViTModel.from_pretrained(model_name, attn_implementation="eager")
         except Exception:
-            # Fallback transformer if offline or downloading is unavailable
-            self.vit = None
-            self.patch_embed = nn.Conv2d(3, embed_dim, kernel_size=16, stride=16)
-            self.cls_token = nn.Parameter(torch.randn(1, 1, embed_dim))
-            self.pos_embed = nn.Parameter(torch.randn(1, 197, embed_dim))
+            try:
+                self.vit = ViTModel.from_pretrained(model_name)
+            except Exception:
+                # Fallback transformer if offline or downloading is unavailable
+                self.vit = None
+                self.patch_embed = nn.Conv2d(3, embed_dim, kernel_size=16, stride=16)
+                self.cls_token = nn.Parameter(torch.randn(1, 1, embed_dim))
+                self.pos_embed = nn.Parameter(torch.randn(1, 197, embed_dim))
 
     def forward(self, pixel_values):
         """

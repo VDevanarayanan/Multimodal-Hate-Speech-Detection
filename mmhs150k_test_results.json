@@ -1,103 +1,128 @@
 {
-  "num_samples": 1000,
+  "num_samples": 500,
+  "modality": "multimodal",
+  "decision_threshold": 0.56,
   "primary_metrics": {
-    "accuracy": 0.735,
-    "precision": 0.3675,
-    "recall": 0.5,
-    "f1_score": 0.4236,
-    "auc_roc": 0.4992
+    "accuracy": 0.626,
+    "precision": 0.6261,
+    "recall": 0.626,
+    "f1_score": 0.626,
+    "auc_roc": 0.659
+  },
+  "calibrated_metrics": {
+    "optimal_threshold": 0.44,
+    "calibrated_macro_f1": 0.63,
+    "calibrated_accuracy": 0.628,
+    "calibrated_hate_recall": 0.636,
+    "calibrated_hate_precision": 0.626
   },
   "binary_metrics": {
-    "accuracy": 0.735,
-    "auc_roc": 0.4992,
+    "accuracy": 0.626,
+    "auc_roc": 0.659,
     "macro": {
-      "precision": 0.3675,
-      "recall": 0.5,
-      "f1_score": 0.4236
+      "precision": 0.6261,
+      "recall": 0.626,
+      "f1_score": 0.626
     },
     "micro": {
-      "precision": 0.735,
-      "recall": 0.735,
-      "f1_score": 0.735
+      "precision": 0.626,
+      "recall": 0.626,
+      "f1_score": 0.626
     },
     "hate_class_specific": {
-      "precision": 0.735,
-      "recall": 1.0,
-      "f1_score": 0.8473
+      "precision": 0.6286,
+      "recall": 0.616,
+      "f1_score": 0.6222
     },
     "confusion_matrix": [
       [
-        0,
-        265
+        159,
+        91
       ],
       [
-        0,
-        735
+        96,
+        154
       ]
     ]
   },
   "category_metrics": {
     "Racism / Xenophobia": {
-      "accuracy": 0.621,
-      "precision": 0.3684,
-      "recall": 0.0187,
-      "f1_score": 0.0356,
-      "support": 374
+      "accuracy": 0.76,
+      "precision": 0.466,
+      "recall": 0.4248,
+      "f1_score": 0.4444,
+      "support": 113,
+      "predicted_count": 103,
+      "prediction_rate": 20.6
     },
     "Sexism / Misogyny": {
-      "accuracy": 0.42,
-      "precision": 0.1915,
-      "recall": 0.6368,
-      "f1_score": 0.2944,
-      "support": 190
+      "accuracy": 0.842,
+      "precision": 0.52,
+      "recall": 0.321,
+      "f1_score": 0.3969,
+      "support": 81,
+      "predicted_count": 50,
+      "prediction_rate": 10.0
     },
     "Homophobia / LGBTQ+ Hate": {
-      "accuracy": 0.115,
-      "precision": 0.115,
-      "recall": 1.0,
-      "f1_score": 0.2063,
-      "support": 115
+      "accuracy": 0.94,
+      "precision": 0.75,
+      "recall": 0.6,
+      "f1_score": 0.6667,
+      "support": 50,
+      "predicted_count": 40,
+      "prediction_rate": 8.0
     },
     "Religious Hate": {
-      "accuracy": 0.97,
+      "accuracy": 0.972,
       "precision": 0.0,
       "recall": 0.0,
       "f1_score": 0.0,
-      "support": 30
+      "support": 13,
+      "predicted_count": 1,
+      "prediction_rate": 0.2
     },
     "Disability Discrimination": {
       "accuracy": 0.0,
       "precision": 0.0,
       "recall": 0.0,
       "f1_score": 0.0,
-      "support": 0
+      "support": 0,
+      "predicted_count": 0,
+      "prediction_rate": 0.0
     },
     "Political Extremism": {
-      "accuracy": 0.956,
+      "accuracy": 0.0,
       "precision": 0.0,
       "recall": 0.0,
       "f1_score": 0.0,
-      "support": 0
+      "support": 0,
+      "predicted_count": 0,
+      "prediction_rate": 0.0
     },
     "Cyberbullying / Threat": {
-      "accuracy": 0.974,
+      "accuracy": 0.0,
       "precision": 0.0,
       "recall": 0.0,
       "f1_score": 0.0,
-      "support": 0
+      "support": 0,
+      "predicted_count": 0,
+      "prediction_rate": 0.0
     },
     "Dehumanization / Slurs": {
-      "accuracy": 0.762,
-      "precision": 0.0,
-      "recall": 0.0,
-      "f1_score": 0.0,
-      "support": 238
+      "accuracy": 0.816,
+      "precision": 0.5325,
+      "recall": 0.4227,
+      "f1_score": 0.4713,
+      "support": 97,
+      "predicted_count": 77,
+      "prediction_rate": 15.4
     }
   },
   "average_dynamic_gates": {
-    "main_text_gate": 0.5858,
-    "vision_gate": 0.4221,
-    "cross_attention_gate": 0.5527,
-    "post_text_suppression_gate": 0.408
+    "main_text_gate": 0.4241,
+    "vision_gate": 0.8345,
+    "cross_attention_gate": 0.3569,
+    "post_text_suppression_gate": 0.0081
   }
 }

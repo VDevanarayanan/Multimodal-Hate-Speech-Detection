@@ -10,32 +10,42 @@ class TextDeobfuscator:
     - De-spacing / de-punctualizing character-inserted words (e.g., h.a.t.e -> hate)
     """
 
+    # True cross-script homoglyphs (Cyrillic, Greek, lookalikes) - NO Latin letters or pure digits here!
     HOMOGLYPH_MAP = {
-        'а': 'a', 'а́': 'a', 'â': 'a', 'à': 'a', 'á': 'a', 'ä': 'a', 'α': 'a', '@': 'a', '4': 'a',
-        'в': 'b', 'β': 'b', '8': 'b',
+        'а': 'a', 'а́': 'a', 'â': 'a', 'à': 'a', 'á': 'a', 'ä': 'a', 'α': 'a',
+        'в': 'b', 'β': 'b',
         'с': 'c', 'ç': 'c', '¢': 'c', '©': 'c',
         'ԁ': 'd', 'đ': 'd',
-        'е': 'e', 'е́': 'e', 'ê': 'e', 'è': 'e', 'é': 'e', 'ë': 'e', 'є': 'e', '3': 'e', '€': 'e',
-        'f': 'f', 'ƒ': 'f',
-        'g': 'g', '9': 'g',
-        'һ': 'h', 'н': 'h', '#': 'h',
-        'і': 'i', 'í': 'i', 'ì': 'i', 'ï': 'i', 'î': 'i', '1': 'i', '!': 'i', '|': 'i',
+        'е': 'e', 'е́': 'e', 'ê': 'e', 'è': 'e', 'é': 'e', 'ë': 'e', 'є': 'e', '€': 'e',
+        'ƒ': 'f',
+        'һ': 'h', 'н': 'h',
+        'і': 'i', 'í': 'i', 'ì': 'i', 'ï': 'i', 'î': 'i',
         'ј': 'j',
         'к': 'k',
-        'l': 'l', '1': 'l', '|': 'l',
         'м': 'm',
         'п': 'n', 'ñ': 'n',
-        'о': 'o', 'ó': 'o', 'ò': 'o', 'ö': 'o', 'ô': 'o', '0': 'o', 'ø': 'o', 'θ': 'o',
+        'о': 'o', 'ó': 'o', 'ò': 'o', 'ö': 'o', 'ô': 'o', 'ø': 'o', 'θ': 'o',
         'р': 'p', 'ρ': 'p',
-        'q': 'q',
         'г': 'r', '®': 'r',
-        'ѕ': 's', '$': 's', '5': 's', '§': 's',
-        'т': 't', 'τ': 't', '7': 't', '+': 't',
-        'υ': 'u', 'ú': 'u', 'ù': 'u', 'ü': 'u', 'û': 'u', 'µ': 'u', 'v': 'u',
-        'w': 'w', 'vv': 'w',
+        'ѕ': 's', '§': 's',
+        'т': 't', 'τ': 't',
+        'υ': 'u', 'ú': 'u', 'ù': 'u', 'ü': 'u', 'û': 'u', 'µ': 'u',
         'х': 'x', '×': 'x',
-        'у': 'y', 'ý': 'y', 'ÿ': 'y', 'γ': 'y',
-        'z': 'z', '2': 'z', '%': 'z'
+        'у': 'y', 'ý': 'y', 'ÿ': 'y', 'γ': 'y'
+    }
+
+    # Leetspeak mappings applied ONLY inside words containing alphabetic characters
+    LEET_IN_WORD = {
+        '0': 'o',
+        '1': 'i',
+        '3': 'e',
+        '4': 'a',
+        '5': 's',
+        '7': 't',
+        '8': 'b',
+        '@': 'a',
+        '$': 's',
+        '!': 'i'
     }
 
     ZERO_WIDTH_CHARS = re.compile(r'[\u200B-\u200D\uFEFF\u200E\u200F\u00AD]')
@@ -50,24 +60,50 @@ class TextDeobfuscator:
 
     @classmethod
     def normalize_homoglyphs(cls, text: str) -> str:
-        """Replaces homoglyphs and leetspeak symbols with standard Latin characters."""
+        """Replaces cross-script homoglyphs with standard Latin characters."""
         if not text:
             return ""
         
-        # NFKD normalization first
         normalized = unicodedata.normalize('NFKD', text)
         result = []
-        
         for char in normalized:
             lower_char = char.lower()
             if lower_char in cls.HOMOGLYPH_MAP:
-                # Keep case matching if possible
                 rep = cls.HOMOGLYPH_MAP[lower_char]
                 result.append(rep.upper() if char.isupper() else rep)
             else:
                 result.append(char)
-                
         return "".join(result)
+
+    @classmethod
+    def decode_word_leetspeak(cls, text: str) -> str:
+        """
+        Decodes leetspeak digits & symbols ONLY when embedded inside words flanked by letters.
+        Protects standalone numbers, percentages, dates, and currency (e.g. 2020, 100%, $37.50).
+        """
+        if not text:
+            return ""
+
+        def _decode_token(match):
+            token = match.group(0)
+            # If token is pure digits or pure punctuation/currency, leave it intact
+            has_letters = bool(re.search(r'[a-zA-Z]', token))
+            has_substitutions = any(c in cls.LEET_IN_WORD for c in token)
+            
+            if has_letters and has_substitutions:
+                res = []
+                for char in token:
+                    if char in cls.LEET_IN_WORD:
+                        res.append(cls.LEET_IN_WORD[char])
+                    else:
+                        res.append(char)
+                return "".join(res)
+            return token
+
+        # Split on whitespace while preserving punctuation boundaries
+        tokens = text.split(" ")
+        cleaned_tokens = [_decode_token(re.match(r'\S+', tok)) if tok.strip() else tok for tok in tokens]
+        return " ".join([t if isinstance(t, str) else t.group(0) for t in cleaned_tokens])
 
     @classmethod
     def collapse_inserted_delimiters(cls, text: str) -> str:
@@ -90,9 +126,10 @@ class TextDeobfuscator:
         step1 = cls.remove_zero_width(text)
         step2 = cls.collapse_inserted_delimiters(step1)
         step3 = cls.normalize_homoglyphs(step2)
+        step4 = cls.decode_word_leetspeak(step3)
         
         # Clean extra spaces
-        return re.sub(r'\s+', ' ', step3).strip()
+        return re.sub(r'\s+', ' ', step4).strip()
 
 
 if __name__ == "__main__":
